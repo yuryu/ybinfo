@@ -15,7 +15,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-// YbInfoDlg.cpp : �C���v�������e�[�V���� �t�@�C��
+// YbInfoDlg.cpp : インプリメンテーション ファイル
 //
 
 #include "stdafx.h"
@@ -32,25 +32,25 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
-// �A�v���P�[�V�����̃o�[�W�������Ŏg���Ă��� CAboutDlg �_�C�A���O
+// アプリケーションのバージョン情報で使われている CAboutDlg ダイアログ
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// �_�C�A���O �f�[�^
+// ダイアログ データ
 	//{{AFX_DATA(CAboutDlg)
 	enum { IDD = IDD_ABOUTBOX };
 	//}}AFX_DATA
 
-	// ClassWizard �͉��z�֐��̃I�[�o�[���C�h�𐶐����܂�
+	// ClassWizard は仮想関数のオーバーライドを生成します
 	//{{AFX_VIRTUAL(CAboutDlg)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV �̃T�|�[�g
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV のサポート
 	//}}AFX_VIRTUAL
 
-// �C���v�������e�[�V����
+// インプリメンテーション
 protected:
 	//{{AFX_MSG(CAboutDlg)
 	//}}AFX_MSG
@@ -72,12 +72,12 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
 	//{{AFX_MSG_MAP(CAboutDlg)
-		// ���b�Z�[�W �n���h��������܂���B
+		// メッセージ ハンドラがありません。
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CYbInfoDlg �_�C�A���O
+// CYbInfoDlg ダイアログ
 
 CYbInfoDlg::CYbInfoDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CYbInfoDlg::IDD, pParent)
@@ -107,7 +107,7 @@ CYbInfoDlg::CYbInfoDlg(CWnd* pParent /*=NULL*/)
 	m_csEstimatedTime = _T("");
 	m_csTemperature = _T("");
 	//}}AFX_DATA_INIT
-	// ����: LoadIcon �� Win32 �� DestroyIcon �̃T�u�V�[�P���X��v�����܂���B
+	// メモ: LoadIcon は Win32 の DestroyIcon のサブシーケンスを要求しません。
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
@@ -160,15 +160,15 @@ BEGIN_MESSAGE_MAP(CYbInfoDlg, CDialog)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CYbInfoDlg ���b�Z�[�W �n���h��
+// CYbInfoDlg メッセージ ハンドラ
 
 BOOL CYbInfoDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// "�o�[�W�������..." ���j���[���ڂ��V�X�e�� ���j���[�֒ǉ����܂��B
+	// "バージョン情報..." メニュー項目をシステム メニューへ追加します。
 
-	// IDM_ABOUTBOX �̓R�}���h ���j���[�͈̔͂łȂ���΂Ȃ�܂���B
+	// IDM_ABOUTBOX はコマンド メニューの範囲でなければなりません。
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -184,12 +184,12 @@ BOOL CYbInfoDlg::OnInitDialog()
 		}
 	}
 
-	// ���̃_�C�A���O�p�̃A�C�R����ݒ肵�܂��B�t���[�����[�N�̓A�v���P�[�V�����̃��C��
-	// �E�B���h�E���_�C�A���O�łȂ����͎����I�ɐݒ肵�܂���B
-	SetIcon(m_hIcon, TRUE);			// �傫���A�C�R����ݒ�
-	SetIcon(m_hIcon, FALSE);		// �������A�C�R����ݒ�
+	// このダイアログ用のアイコンを設定します。フレームワークはアプリケーションのメイン
+	// ウィンドウがダイアログでない時は自動的に設定しません。
+	SetIcon(m_hIcon, TRUE);			// 大きいアイコンを設定
+	SetIcon(m_hIcon, FALSE);		// 小さいアイコンを設定
 	
-	// TODO: ���ʂȏ��������s�����͂��̏ꏊ�ɒǉ����Ă��������B
+	// TODO: 特別な初期化を行う時はこの場所に追加してください。
 	
 	m_spAutoUpdate.SetRange(0, UD_MAXVAL);
 	m_spAutoUpdate.SetBuddy(&m_eAutoUpdate);
@@ -212,7 +212,7 @@ BOOL CYbInfoDlg::OnInitDialog()
 	m_cbBatteryList.EndWaitCursor();
 	UpdateBatteryInformation();
 
-	return TRUE;  // TRUE ��Ԃ��ƃR���g���[���ɐݒ肵���t�H�[�J�X�͎����܂���B
+	return TRUE;  // TRUE を返すとコントロールに設定したフォーカスは失われません。
 }
 
 void CYbInfoDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -228,19 +228,19 @@ void CYbInfoDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// �����_�C�A���O�{�b�N�X�ɍŏ����{�^����ǉ�����Ȃ�΁A�A�C�R����`�悷��
-// �R�[�h���ȉ��ɋL�q����K�v������܂��BMFC �A�v���P�[�V������ document/view
-// ���f�����g���Ă���̂ŁA���̏����̓t���[�����[�N�ɂ�莩���I�ɏ�������܂��B
+// もしダイアログボックスに最小化ボタンを追加するならば、アイコンを描画する
+// コードを以下に記述する必要があります。MFC アプリケーションは document/view
+// モデルを使っているので、この処理はフレームワークにより自動的に処理されます。
 
 void CYbInfoDlg::OnPaint() 
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // �`��p�̃f�o�C�X �R���e�L�X�g
+		CPaintDC dc(this); // 描画用のデバイス コンテキスト
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// �N���C�A���g�̋�`�̈���̒���
+		// クライアントの矩形領域内の中央
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -248,7 +248,7 @@ void CYbInfoDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// �A�C�R����`�悵�܂��B
+		// アイコンを描画します。
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -257,8 +257,8 @@ void CYbInfoDlg::OnPaint()
 	}
 }
 
-// �V�X�e���́A���[�U�[���ŏ����E�B���h�E���h���b�O���Ă���ԁA
-// �J�[�\����\�����邽�߂ɂ������Ăяo���܂��B
+// システムは、ユーザーが最小化ウィンドウをドラッグしている間、
+// カーソルを表示するためにここを呼び出します。
 HCURSOR CYbInfoDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
@@ -266,13 +266,13 @@ HCURSOR CYbInfoDlg::OnQueryDragIcon()
 
 void CYbInfoDlg::OnBUpdate() 
 {
-	// TODO: ���̈ʒu�ɃR���g���[���ʒm�n���h���p�̃R�[�h��ǉ����Ă�������
+	// TODO: この位置にコントロール通知ハンドラ用のコードを追加してください
 	UpdateBatteryInformation();
 }
 
 void CYbInfoDlg::OnSelendokCbBatterylist() 
 {
-	// TODO: ���̈ʒu�ɃR���g���[���ʒm�n���h���p�̃R�[�h��ǉ����Ă�������
+	// TODO: この位置にコントロール通知ハンドラ用のコードを追加してください
 	UpdateData(TRUE);
 	UpdateBatteryInformation();
 	
@@ -420,7 +420,7 @@ void CYbInfoDlg::UpdateBatteryInformation()
 
 void CYbInfoDlg::WinHelp(DWORD dwData, UINT nCmd) 
 {
-	// TODO: ���̈ʒu�ɌŗL�̏�����ǉ����邩�A�܂��͊�{�N���X���Ăяo���Ă�������
+	// TODO: この位置に固有の処理を追加するか、または基本クラスを呼び出してください
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 	return;
@@ -430,12 +430,12 @@ void CYbInfoDlg::WinHelp(DWORD dwData, UINT nCmd)
 
 void CYbInfoDlg::OnEnChangeEAutoupdate()
 {
-	// TODO :  ���ꂪ RICHEDIT �R���g���[���̏ꍇ�A�܂��ACDialog::OnInitDialog() �֐����I�[�o�[���C�h���āA
-	// OR ��Ԃ� ENM_CORRECTTEXT �t���O���}�X�N�ɓ���āA
-	// CRichEditCtrl().SetEventMask() ���Ăяo���Ȃ�����A
-	// �R���g���[���́A���̒ʒm�𑗐M���܂���B
+	// TODO :  これが RICHEDIT コントロールの場合、まず、CDialog::OnInitDialog() 関数をオーバーライドして、
+	// OR 状態の ENM_CORRECTTEXT フラグをマスクに入れて、
+	// CRichEditCtrl().SetEventMask() を呼び出さない限り、
+	// コントロールは、この通知を送信しません。
 
-	// TODO :  �����ɃR���g���[���ʒm�n���h�� �R�[�h��ǉ����Ă��������B
+	// TODO :  ここにコントロール通知ハンドラ コードを追加してください。
 	if(m_eAutoUpdate.GetWindowTextLength() <= 0){
 		return;
 	}
@@ -450,7 +450,7 @@ void CYbInfoDlg::OnEnChangeEAutoupdate()
 
 void CYbInfoDlg::OnTimer(UINT nIDEvent)
 {
-	// TODO : �����Ƀ��b�Z�[�W �n���h�� �R�[�h��ǉ����邩�A����̏������Ăяo���܂��B
+	// TODO : ここにメッセージ ハンドラ コードを追加するか、既定の処理を呼び出します。
 
 	if(nIDEvent == AutoUpdateTimerId){
 		UpdateBatteryInformation();

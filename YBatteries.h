@@ -16,7 +16,7 @@
  limitations under the License.
 */
 
-// YBatteries.h: CYBatteries クラスのインターフェイス
+// YBatteries.h: CYBatteries 繧ｯ繝ｩ繧ｹ縺ｮ繧､繝ｳ繧ｿ繝ｼ繝輔ぉ繧､繧ｹ
 //
 //////////////////////////////////////////////////////////////////////
 

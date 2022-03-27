@@ -15,7 +15,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-// YBattery.h: CYBattery クラスのインターフェイス
+// YBattery.h: CYBattery 繧ｯ繝ｩ繧ｹ縺ｮ繧､繝ｳ繧ｿ繝ｼ繝輔ぉ繧､繧ｹ
 //
 //////////////////////////////////////////////////////////////////////
 
