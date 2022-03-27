@@ -32,9 +32,9 @@
 
 ・ソースについて
     開発環境は Visual Studio 2008 です。
-    Mercurial レポジトリが以下の URI で利用可能です。
+    GitHub にてソースコードを公開しています。
 
-    https://holo.wotax.net/~hg/pub/YbInfo/
+    https://github.com/yuryu/ybinfo/
 
 ・ライセンス
     Apache License, Version 2.0 にて配布します。
@@ -78,6 +78,6 @@
             
 
 ・連絡先など
-    Web     http://www.wotax.net/
-    E-mail  yuryu@wotax.net
+    Twitter @Yuryu
+    E-mail  yuryu@yuryu.jp
 
