@@ -1,0 +1,276 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 日本語 resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
+#ifdef _WIN32
+LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
+#pragma code_page(932)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 17, 1\r\n"
+    "#pragma code_page(932)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\YbInfo.rc2""  // Microsoft Visual C++ 以外のツールで編集されたリソース\r\n"
+    "#include ""l.jpn\\afxres.rc""          // 標準のコンポーネント\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\icon1.ico"
+IDR_MAINFRAME2          ICON                    "res\\YbInfo.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "YbInfoのバージョン情報"
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x0
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "Yuryu's Battery Information Version 1.3",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2008 Yuryu",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
+    LTEXT           "This program is licsensed under GPL v3.",IDC_STATIC,40,40,119,8
+END
+
+IDD_YBINFO_DIALOG DIALOGEX 0, 0, 279, 245
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "YbInfo"
+FONT 9, "ＭＳ Ｐゴシック", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "電池を選んでください(&B)",IDC_STATIC,7,7,130,28
+    COMBOBOX        IDC_CB_BATTERYLIST,11,19,123,68,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "更新(&U)",IDC_B_UPDATE,143,15,35,18
+    GROUPBOX        "自動更新",IDC_STATIC,183,7,43,27
+    CONTROL         "",IDC_SPIN_AUTOUPDATE,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_ARROWKEYS,214,7,10,14
+    EDITTEXT        IDC_E_AUTOUPDATE,187,17,24,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "秒",IDC_STATIC,213,23,8,8
+    PUSHBUTTON      "終了(&X)",IDOK,235,15,37,18
+    GROUPBOX        "基本情報",IDC_STATIC,7,40,194,93
+    LTEXT           "製造者",IDC_STATIC,14,55,22,8
+    EDITTEXT        IDC_E_MANUFACTURENAME,63,52,133,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "製造年月日",IDC_STATIC,14,70,35,8
+    EDITTEXT        IDC_E_MANUFACTUREDATE,63,67,133,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "デバイス名",IDC_STATIC,14,85,34,8
+    EDITTEXT        IDC_E_DEVICENAME,63,82,133,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "シリアル番号",IDC_STATIC,14,100,39,8
+    EDITTEXT        IDC_E_SERIALNUMBER,63,97,133,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "一意な識別子",IDC_STATIC,14,115,42,8
+    EDITTEXT        IDC_E_UNIQUEID,63,112,133,14,ES_AUTOHSCROLL | ES_READONLY
+    GROUPBOX        "容量",IDC_STATIC,7,143,90,95
+    LTEXT           "電圧",IDC_STATIC,17,158,15,8
+    EDITTEXT        IDC_E_VOLTAGE,36,154,54,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "設計",IDC_STATIC,17,175,15,8
+    EDITTEXT        IDC_E_DESIGNEDCAPACITY,36,171,54,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "フル",IDC_STATIC,17,191,14,8
+    EDITTEXT        IDC_E_CURRENTFULLCAPACITY,36,187,54,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "現在",IDC_STATIC,17,207,15,8
+    EDITTEXT        IDC_E_CURRENTCAPACITY,36,203,54,14,ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Progress1",IDC_P_CAPACITY,"msctls_progress32",PBS_SMOOTH | WS_BORDER,14,225,76,8
+    GROUPBOX        "状態",IDC_STATIC,99,143,96,95
+    EDITTEXT        IDC_E_STATUS,106,154,83,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "(放電/充電)速度",IDC_STATIC,103,175,50,8
+    EDITTEXT        IDC_E_RATE,139,185,51,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "残り時間",IDC_STATIC,105,205,27,8
+    EDITTEXT        IDC_E_ESTIMATEDTIME,139,203,51,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "温度",IDC_STATIC,105,223,15,8
+    EDITTEXT        IDC_E_TEMPERATURE,139,221,51,14,ES_AUTOHSCROLL | ES_READONLY
+    GROUPBOX        "能力",IDC_STATIC,206,40,67,93
+    CHECKBOX        "相対容量",IDC_C_RELATIVE,213,55,43,10
+    CHECKBOX        "標準電源",IDC_C_SYSTEMBATTERY,213,75,43,10
+    CHECKBOX        "短時間用",IDC_C_SHORTTERM,213,95,43,10
+    CHECKBOX        "充電可能",IDC_C_CHARGEABLE,213,115,43,10
+    GROUPBOX        "その他",IDC_STATIC,197,143,75,95
+    LTEXT           "化学コード",IDC_STATIC,203,158,32,8
+    EDITTEXT        IDC_E_CHEMCODE,236,154,32,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "低容量",IDC_STATIC,203,175,22,8
+    EDITTEXT        IDC_E_LOWCAPACITY,232,171,36,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "警告容量",IDC_STATIC,203,193,28,8
+    EDITTEXT        IDC_E_WARNCAPACITY,232,192,36,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "サイクル数",IDC_STATIC,203,211,33,8
+    EDITTEXT        IDC_E_CYCLECOUNT,225,221,43,14,ES_AUTOHSCROLL | ES_READONLY
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,3,0,0
+ PRODUCTVERSION 1,3,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041104b0"
+        BEGIN
+            VALUE "FileDescription", "Yuryu's Battery Information Program"
+            VALUE "FileVersion", "1, 3, 0, 0"
+            VALUE "InternalName", "YbInfo"
+            VALUE "LegalCopyright", "Copyright (C) 2008 Yuryu"
+            VALUE "OriginalFilename", "YbInfo.EXE"
+            VALUE "ProductName", "Yuryu's Battery Information"
+            VALUE "ProductVersion", "1.3"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x411, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_YBINFO_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 272
+        VERTGUIDE, 2
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 238
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "バージョン情報(&A)..."
+    IDS_UNKNOWN             "不明"
+    IDS_DATEFORMAT          "%d年%d月%d日"
+    IDS_CAPACITYFORMAT      "%d mWh"
+    IDS_RELCAPACITYFORMAT   "%d"
+    IDS_VOLTAGEFORMAT       "%d mv"
+    IDS_STATCHARGE          "充電中"
+    IDS_STATDISCHARGE       "放電中"
+    IDS_STATPOWERONLINE     "外部電源使用中"
+    IDS_STATCRITICAL        "消耗"
+    IDS_CYCLECOUNTFORMAT    "%d 回"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_ERR_REQWIN2K        "このアプリケーションを使うには、Windows 2000かそれ以降のOSが必要です\nWindows 9x系では動作しません。"
+    IDS_ERR_NOBATTERIES     "バッテリーが見つかりませんでした。"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_RATEFORMAT          "%d mw"
+    IDS_RELRATEFORMAT       "%d / 時間"
+    IDS_TIMEFORMAT          "%d時間%d分%d秒"
+    IDS_TEMPFORMAT          "%d.%d K"
+    IDS_CAPPERFORMAT        "残り %d ％"
+END
+
+#endif    // 日本語 resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
+#ifdef _WIN32
+LANGUAGE 17, 1
+#pragma code_page(932)
+#endif //_WIN32
+#include "res\YbInfo.rc2"  // Microsoft Visual C++ 以外のツールで編集されたリソース
+#include "l.jpn\afxres.rc"          // 標準のコンポーネント
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
