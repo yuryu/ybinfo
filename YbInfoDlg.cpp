@@ -205,7 +205,7 @@ BOOL CYbInfoDlg::OnInitDialog()
 	m_cbBatteryList.Clear();
 	for(int i = 0; i < m_cyBatteries.m_nBatteries; i++){
 		CString csTemp;
-		csTemp.Format(_T("%d: %s"), i, m_cyBatteries.m_vcpBatteries[i]->m_csDeviceName);
+		csTemp.Format(_T("%d: %s"), i, m_cyBatteries.m_vcpBatteries[i]->m_csDeviceName.GetString());
 		m_cbBatteryList.AddString(csTemp);
 	}
 	m_nSelectedBattery = 0;
@@ -418,7 +418,7 @@ void CYbInfoDlg::UpdateBatteryInformation()
 
 }
 
-void CYbInfoDlg::WinHelp(DWORD dwData, UINT nCmd) 
+void CYbInfoDlg::WinHelp([[maybe_unused]] DWORD dwData, [[maybe_unused]] UINT nCmd)
 {
 	// TODO: この位置に固有の処理を追加するか、または基本クラスを呼び出してください
 	CAboutDlg aboutDlg;

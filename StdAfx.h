@@ -27,7 +27,12 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-//#define VC_EXTRALEAN		// Windows ヘッダーから殆ど使用されないスタッフを除外します。
+#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS      // some CString constructors will be explicit
+
+// turns off MFC's hiding of some common and often safely ignored warning messages
+#define _AFX_ALL_WARNINGS
+
+#include "targetver.h"
 
 #include <afxwin.h>         // MFC のコアおよび標準コンポーネント
 #include <afxext.h>         // MFC の拡張部分
