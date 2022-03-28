@@ -38,7 +38,6 @@ public:
 
 	CYBatteries();
 	virtual ~CYBatteries();
-
 };
 
 #endif // !defined(AFX_YBATTERIES_H__2020652B_477C_4953_9B0D_AFFC64BDE37B__INCLUDED_)

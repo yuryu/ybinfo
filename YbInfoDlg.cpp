@@ -58,6 +58,9 @@ CYbInfoDlg::CYbInfoDlg(): m_iAutoUpdate(0)
 	// メモ: LoadIcon は Win32 の DestroyIcon のサブシーケンスを要求しません。
 	m_hIcon = static_cast<HICON>(::LoadImage(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_MAINFRAME),
 		IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR));
+	_ASSERT(m_hIcon);
+	const BOOL bLoaded = m_csUnknown.LoadString(IDS_UNKNOWN);
+	_ASSERT(bLoaded);
 }
 
 BOOL CYbInfoDlg::PreTranslateMessage(MSG* pMsg) {
@@ -118,9 +121,15 @@ LRESULT CYbInfoDlg::OnInitDialog([[maybe_unused]] UINT uMsg, [[maybe_unused]] WP
 	CWaitCursor waitCursor;
 	m_cbBatteryList.Clear();
 	for(int i = 0; i < m_cyBatteries.m_nBatteries; i++){
+		CStringW csDeviceName;
+		if (m_cyBatteries.m_vcpBatteries[i]->GetNewTag()) {
+			m_cyBatteries.m_vcpBatteries[i]->QueryInfoString(BatteryDeviceName, m_csUnknown, csDeviceName);
+		} else {
+			csDeviceName = m_csUnknown;
+		}
 		CString csTemp;
-		csTemp.Format(_T("%d: %s"), i, m_cyBatteries.m_vcpBatteries[i]->m_csDeviceName.GetString());
-		m_cbBatteryList.AddString(csTemp);
+		csTemp.Format(_T("%d: %s"), i, csDeviceName.GetString());
+		m_cbBatteryList.AddString(std::move(csTemp));
 	}
 	m_nSelectedBattery = 0;
 	waitCursor.Restore();
@@ -204,30 +213,29 @@ LRESULT CYbInfoDlg::OnSelendokCbBatterylist([[maybe_unused]] WORD wNotifyCode, [
 
 void CYbInfoDlg::UpdateBatteryInformation()
 {
-	CYBattery* pcyBattery;
+	CYBattery* pcyBattery = m_cyBatteries.m_vcpBatteries[m_nSelectedBattery];
 
-	pcyBattery = m_cyBatteries.m_vcpBatteries[m_nSelectedBattery];
-
-	pcyBattery -> Update();
-	m_csManufactureName = pcyBattery->m_csManufactureName;
-	m_csDeviceName = pcyBattery->m_csDeviceName;
-	m_csUniqueId = pcyBattery->m_csUniqueId;
-	m_csSerialNumber = pcyBattery->m_csSerialNumber;
-	if(pcyBattery->m_manufactureDate.Year == 0 &&
-		pcyBattery->m_manufactureDate.Month == 0 &&
-		pcyBattery->m_manufactureDate.Day == 0){
-		m_csManufactureDate.LoadString(IDS_UNKNOWN);
-	}else{
+	if (!pcyBattery->GetNewTag()) {
+		return;
+	}
+	pcyBattery->QueryInfoString(BatteryManufactureName, m_csUnknown, m_csManufactureName);
+	pcyBattery->QueryInfoString(BatteryDeviceName, m_csUnknown, m_csDeviceName);
+	pcyBattery->QueryInfoString(BatteryUniqueID, m_csUnknown, m_csUniqueId);
+	pcyBattery->QueryInfoString(BatterySerialNumber, m_csUnknown, m_csSerialNumber);
+	BATTERY_MANUFACTURE_DATE manufactureDate;
+	if (pcyBattery->QueryInfo(BatteryManufactureDate, manufactureDate)) {
 		m_csManufactureDate.Format(IDS_DATEFORMAT,
-			pcyBattery->m_manufactureDate.Year,
-			pcyBattery->m_manufactureDate.Month,
-			pcyBattery->m_manufactureDate.Day);
+			manufactureDate.Year,
+			manufactureDate.Month,
+			manufactureDate.Day);
+	} else {
+		m_csManufactureDate = m_csUnknown;
 	}
 
 	BATTERY_INFORMATION batInfo;
-	pcyBattery->GetBatteryInformation(batInfo);
+	pcyBattery->QueryInfo(BatteryInformation, batInfo);
 	BATTERY_STATUS batStat;
-	pcyBattery->GetBatteryStatus(batStat);
+	pcyBattery->QueryStatus(batStat);
 
 	UINT uCapFormat = IDS_CAPACITYFORMAT;
 	if(batInfo.Capabilities & BATTERY_CAPACITY_RELATIVE){
@@ -249,61 +257,58 @@ void CYbInfoDlg::UpdateBatteryInformation()
 	m_csLowCapacity.Format(uCapFormat, batInfo.DefaultAlert1);
 	m_csWarnCapacity.Format(uCapFormat, batInfo.DefaultAlert2);
 
-	int iProgressColor = batStat.Capacity * 255 / batInfo.FullChargedCapacity;
+	int iProgressColor = 0;
+	if (batInfo.FullChargedCapacity) {
+		iProgressColor = batStat.Capacity * 255 / batInfo.FullChargedCapacity;
+	}
 	m_pCapacity.SendMessage(PBM_SETBARCOLOR, 0,
 		(LPARAM)RGB(255 - iProgressColor, iProgressColor, iProgressColor / 2));
 
-/*
-	CString csCapPerTemp;
-	csCapPerTemp.Format(IDS_CAPPERFORMAT, batStat.Capacity * 100 / batInfo.FullChargedCapacity);
-*/
 
 	if(batStat.Voltage == BATTERY_UNKNOWN_VOLTAGE){
-		m_csVoltage.LoadString(IDS_UNKNOWN);
+		m_csVoltage = m_csUnknown;
 	}else{
 		m_csVoltage.Format(IDS_VOLTAGEFORMAT, batStat.Voltage);
 	}
 
-	CString csTemp;
-	m_csStatus.Empty();
+	std::vector<CString> statusList;
+
 	if(batStat.PowerState & BATTERY_POWER_ON_LINE){
+		CString csTemp;
 		csTemp.LoadString(IDS_STATPOWERONLINE);
-		m_csStatus += csTemp;
+		statusList.push_back(std::move(csTemp));
 	}
 	if(batStat.PowerState & BATTERY_DISCHARGING){
+		CString csTemp;
 		csTemp.LoadString(IDS_STATDISCHARGE);
-		if(m_csStatus.IsEmpty()){
-			m_csStatus += csTemp;
-		}else{
-			m_csStatus += " ";
-			m_csStatus += csTemp;
-		}
+		statusList.push_back(std::move(csTemp));
 	}
 	if(batStat.PowerState & BATTERY_CHARGING){
+		CString csTemp;
 		csTemp.LoadString(IDS_STATCHARGE);
-		if(m_csStatus.IsEmpty()){
-			m_csStatus += csTemp;
-		}else{
-			m_csStatus += " ";
-			m_csStatus += csTemp;
-		}
+		statusList.push_back(std::move(csTemp));
 	}
 	if(batStat.PowerState & BATTERY_CRITICAL){
+		CString csTemp;
 		csTemp.LoadString(IDS_STATCRITICAL);
-		if(m_csStatus.IsEmpty()){
-			m_csStatus += csTemp;
-		}else{
-			m_csStatus += " ";
-			m_csStatus += csTemp;
-		}
+		statusList.push_back(std::move(csTemp));
 	}
+	m_csStatus.Empty();
+	for (auto& status: statusList)
+	{
+		if (!m_csStatus.IsEmpty()) {
+			m_csStatus.AppendChar(_T(' '));
+		}
+		m_csStatus.Append(std::move(status));
+	}
+
 	if(batInfo.CycleCount){
 		m_csCycleCount.Format(IDS_CYCLECOUNTFORMAT, batInfo.CycleCount);
 	}else{
-		m_csCycleCount.LoadString(IDS_UNKNOWN);
+		m_csCycleCount = m_csUnknown;
 	}
 	if(batStat.Rate == BATTERY_UNKNOWN_RATE){
-		m_csRate.LoadString(IDS_UNKNOWN);
+		m_csRate = m_csUnknown;
 	}else{
 		if(m_bRelativeCapacity){
 			m_csRate.Format(IDS_RELRATEFORMAT, abs(batStat.Rate));
@@ -312,34 +317,34 @@ void CYbInfoDlg::UpdateBatteryInformation()
 		}
 	}
 
-	int i;
 	m_csChemistryCode.Empty();
-	for(i = 0; i < 4; i++){
+	for(int i = 0; i < 4; i++){
 		if(batInfo.Chemistry[i] == 0){
 			break;
 		}
 		m_csChemistryCode += batInfo.Chemistry[i];
 	}
 	
-	if(pcyBattery->m_ulEstimatedTime == BATTERY_UNKNOWN_TIME){
-		m_csEstimatedTime.LoadString(IDS_UNKNOWN);
-	}else{
+	ULONG ulEstimatedTime;
+	if (pcyBattery->QueryInfo(BatteryEstimatedTime, ulEstimatedTime)) {
 		m_csEstimatedTime.Format(IDS_TIMEFORMAT,
-			pcyBattery->m_ulEstimatedTime / 3600,
-			pcyBattery->m_ulEstimatedTime % 3600 / 60,
-			pcyBattery->m_ulEstimatedTime % 60);
+			ulEstimatedTime / 3600,
+			ulEstimatedTime % 3600 / 60,
+			ulEstimatedTime % 60);
+	} else {
+		m_csEstimatedTime = m_csUnknown;
 	}
 
-	if(pcyBattery->m_ulTemperature){
+	ULONG ulTemperature;
+	if(pcyBattery->QueryInfo(BatteryTemperature, ulTemperature)) {
 		m_csTemperature.Format(IDS_TEMPFORMAT,
-			pcyBattery->m_ulTemperature / 10,
-			pcyBattery->m_ulTemperature % 10);
+			ulTemperature / 10,
+			ulTemperature % 10);
 	}else{
-		m_csTemperature.LoadString(IDS_UNKNOWN);
+		m_csTemperature = m_csUnknown;
 	}
 
 	DoDataExchange(DDX_LOAD);
-
 }
 
 LRESULT CYbInfoDlg::OnEnChangeEAutoupdate([[maybe_unused]] WORD wNotifyCode, [[maybe_unused]] WORD wID, [[maybe_unused]] HWND hWndCtl, [[maybe_unused]] BOOL& bHandled)

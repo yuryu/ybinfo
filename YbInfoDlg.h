@@ -79,6 +79,7 @@ public:
 
 // インプリメンテーション
 	HICON m_hIcon;
+	CString m_csUnknown;
 
 	// 生成されたメッセージ マップ関数
 	//{{AFX_MSG(CYbInfoDlg)
