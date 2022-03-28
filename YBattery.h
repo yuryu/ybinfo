@@ -31,26 +31,36 @@
 class CYBattery  
 {
 public:
-	ULONG m_ulTemperature;
-	ULONG m_ulEstimatedTime;
-	bool GetBatteryStatus(BATTERY_STATUS& batStat);
-	CString m_csUniqueId;
-	CString m_csSerialNumber;
-	bool Update();
-	BATTERY_MANUFACTURE_DATE m_manufactureDate;
-	CString m_csManufactureName;
-	CString m_csDeviceName;
-	ULONG GetNewTag();
-	bool Open(const CString& csBatDevice);
-	bool GetBatteryInformation(BATTERY_INFORMATION& batInfo);
 	CYBattery();
-	virtual ~CYBattery();
+	~CYBattery();
+
+	bool Open(const CString& csBatDevice);
+	bool QueryInfoString(const BATTERY_QUERY_INFORMATION_LEVEL level, const CStringW& csPlaceholder, CStringW& csOutStr);
+	template <typename T> bool QueryInfo(const BATTERY_QUERY_INFORMATION_LEVEL level, T& out);
+	bool QueryStatus(BATTERY_STATUS& batStat);
+	ULONG GetNewTag();
 
 private:
-	bool QueryString(BATTERY_QUERY_INFORMATION& batQueryInfo, CString& csOutStr);
-	ULONG m_ulBatTag;
 	bool CloseIfOpen();
+
+	ULONG m_ulBatTag;
 	HANDLE m_hBattery;
 };
+
+template<typename T>
+bool CYBattery::QueryInfo(const BATTERY_QUERY_INFORMATION_LEVEL level, T& out)
+{
+	BATTERY_QUERY_INFORMATION batQueryInfo = {
+		.BatteryTag = m_ulBatTag,
+		.InformationLevel = level,
+		.AtRate = 0,
+	};
+	DWORD dwBytesReturned;
+	const BOOL bSucceeded = DeviceIoControl(m_hBattery, IOCTL_BATTERY_QUERY_INFORMATION,
+		&batQueryInfo, sizeof(batQueryInfo), &out, sizeof(out),
+		&dwBytesReturned, nullptr);
+	return bSucceeded;
+}
+
 
 #endif // !defined(AFX_YBATTERY_H__D9369154_8921_47BE_8B46_8BA9DE7BD304__INCLUDED_)
