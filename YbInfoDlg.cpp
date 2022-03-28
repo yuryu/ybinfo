@@ -24,64 +24,12 @@
 
 #include "YBattery.h"
 #include "YBInfoDlg.h"
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-/////////////////////////////////////////////////////////////////////////////
-// アプリケーションのバージョン情報で使われている CAboutDlg ダイアログ
-
-class CAboutDlg : public CDialog
-{
-public:
-	CAboutDlg();
-
-// ダイアログ データ
-	//{{AFX_DATA(CAboutDlg)
-	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
-
-	// ClassWizard は仮想関数のオーバーライドを生成します
-	//{{AFX_VIRTUAL(CAboutDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV のサポート
-	//}}AFX_VIRTUAL
-
-// インプリメンテーション
-protected:
-	//{{AFX_MSG(CAboutDlg)
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-};
-
-CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
-{
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
-}
-
-void CAboutDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
-}
-
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// メッセージ ハンドラがありません。
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
+#include "AboutDlg.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CYbInfoDlg ダイアログ
 
-CYbInfoDlg::CYbInfoDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CYbInfoDlg::IDD, pParent)
-	, m_iAutoUpdate(0)
+CYbInfoDlg::CYbInfoDlg(): m_iAutoUpdate(0)
 {
 	//{{AFX_DATA_INIT(CYbInfoDlg)
 	m_csManufactureName = _T("");
@@ -108,92 +56,57 @@ CYbInfoDlg::CYbInfoDlg(CWnd* pParent /*=NULL*/)
 	m_csTemperature = _T("");
 	//}}AFX_DATA_INIT
 	// メモ: LoadIcon は Win32 の DestroyIcon のサブシーケンスを要求しません。
-	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_hIcon = static_cast<HICON>(::LoadImage(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_MAINFRAME),
+		IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR));
 }
 
-void CYbInfoDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CYbInfoDlg)
-	DDX_Control(pDX, IDOK, m_cbOk);
-	DDX_Control(pDX, IDC_B_UPDATE, m_cbUpdate);
-	DDX_Control(pDX, IDC_P_CAPACITY, m_pCapacity);
-	DDX_Control(pDX, IDC_CB_BATTERYLIST, m_cbBatteryList);
-	DDX_Text(pDX, IDC_E_MANUFACTURENAME, m_csManufactureName);
-	DDX_Text(pDX, IDC_E_UNIQUEID, m_csUniqueId);
-	DDX_Text(pDX, IDC_E_DEVICENAME, m_csDeviceName);
-	DDX_Text(pDX, IDC_E_MANUFACTUREDATE, m_csManufactureDate);
-	DDX_CBIndex(pDX, IDC_CB_BATTERYLIST, m_nSelectedBattery);
-	DDX_Text(pDX, IDC_E_SERIALNUMBER, m_csSerialNumber);
-	DDX_Text(pDX, IDC_E_CURRENTCAPACITY, m_csCurrentCapacity);
-	DDX_Text(pDX, IDC_E_CURRENTFULLCAPACITY, m_csFullChargedCapacity);
-	DDX_Text(pDX, IDC_E_DESIGNEDCAPACITY, m_csDesignedCapacity);
-	DDX_Text(pDX, IDC_E_VOLTAGE, m_csVoltage);
-	DDX_Check(pDX, IDC_C_RELATIVE, m_bRelativeCapacity);
-	DDX_Check(pDX, IDC_C_SHORTTERM, m_bShortTerm);
-	DDX_Check(pDX, IDC_C_SYSTEMBATTERY, m_bSystemBattery);
-	DDX_Check(pDX, IDC_C_CHARGEABLE, m_bChargeable);
-	DDX_Text(pDX, IDC_E_STATUS, m_csStatus);
-	DDX_Text(pDX, IDC_E_CYCLECOUNT, m_csCycleCount);
-	DDX_Text(pDX, IDC_E_RATE, m_csRate);
-	DDX_Text(pDX, IDC_E_CHEMCODE, m_csChemistryCode);
-	DDX_Text(pDX, IDC_E_LOWCAPACITY, m_csLowCapacity);
-	DDX_Text(pDX, IDC_E_WARNCAPACITY, m_csWarnCapacity);
-	DDX_Text(pDX, IDC_E_ESTIMATEDTIME, m_csEstimatedTime);
-	DDX_Text(pDX, IDC_E_TEMPERATURE, m_csTemperature);
-	//}}AFX_DATA_MAP
-	DDX_Control(pDX, IDC_SPIN_AUTOUPDATE, m_spAutoUpdate);
-	DDX_Text(pDX, IDC_E_AUTOUPDATE, m_iAutoUpdate);
-	DDX_Control(pDX, IDC_E_AUTOUPDATE, m_eAutoUpdate);
+BOOL CYbInfoDlg::PreTranslateMessage(MSG* pMsg) {
+	return ::IsDialogMessage(m_hWnd, pMsg);
 }
-
-BEGIN_MESSAGE_MAP(CYbInfoDlg, CDialog)
-	//{{AFX_MSG_MAP(CYbInfoDlg)
-	ON_WM_SYSCOMMAND()
-	ON_WM_PAINT()
-	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_B_UPDATE, OnBUpdate)
-	ON_CBN_SELENDOK(IDC_CB_BATTERYLIST, OnSelendokCbBatterylist)
-	//}}AFX_MSG_MAP
-	ON_EN_CHANGE(IDC_E_AUTOUPDATE, OnEnChangeEAutoupdate)
-	ON_WM_TIMER()
-END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CYbInfoDlg メッセージ ハンドラ
 
-BOOL CYbInfoDlg::OnInitDialog()
+LRESULT CYbInfoDlg::OnInitDialog([[maybe_unused]] UINT uMsg, [[maybe_unused]] WPARAM wParam, [[maybe_unused]] LPARAM lParam, [[maybe_unused]] BOOL& bHandled)
 {
-	CDialog::OnInitDialog();
-
 	// "バージョン情報..." メニュー項目をシステム メニューへ追加します。
 
 	// IDM_ABOUTBOX はコマンド メニューの範囲でなければなりません。
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-	ASSERT(IDM_ABOUTBOX < 0xF000);
+	_ASSERTE((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	_ASSERTE(IDM_ABOUTBOX < 0xF000);
 
-	CMenu* pSysMenu = GetSystemMenu(FALSE);
-	if (pSysMenu != NULL)
+	CMenu pSysMenu(GetSystemMenu(FALSE));
+	if (pSysMenu.IsMenu())
 	{
 		CString strAboutMenu;
 		strAboutMenu.LoadString(IDS_ABOUTBOX);
 		if (!strAboutMenu.IsEmpty())
 		{
-			pSysMenu->AppendMenu(MF_SEPARATOR);
-			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+			pSysMenu.AppendMenu(MF_SEPARATOR);
+			pSysMenu.AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
 		}
 	}
+	pSysMenu.Detach();
+
+	// register object for message filtering
+	CMessageLoop* pLoop = _Module.GetMessageLoop();
+	_ASSERT(pLoop);
+	pLoop->AddMessageFilter(this);
 
 	// このダイアログ用のアイコンを設定します。フレームワークはアプリケーションのメイン
 	// ウィンドウがダイアログでない時は自動的に設定しません。
 	SetIcon(m_hIcon, TRUE);			// 大きいアイコンを設定
-	SetIcon(m_hIcon, FALSE);		// 小さいアイコンを設定
+	const HICON hIconSmall = static_cast<HICON>(::LoadImage(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_MAINFRAME),
+		IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR));
+	SetIcon(hIconSmall, FALSE);		// 小さいアイコンを設定
 	
 	// TODO: 特別な初期化を行う時はこの場所に追加してください。
-	
-	m_spAutoUpdate.SetRange(0, UD_MAXVAL);
-	m_spAutoUpdate.SetBuddy(&m_eAutoUpdate);
+	CenterWindow();
 
+	DoDataExchange(DDX_LOAD);
+
+	m_spAutoUpdate.SetRange(0, UD_MAXVAL);
+	m_spAutoUpdate.SetBuddy(::GetDlgItem(m_hWnd, IDC_E_AUTOUPDATE));
 
 	if(m_cyBatteries.m_nBatteries == 0){
 		m_cbUpdate.EnableWindow(FALSE);
@@ -201,7 +114,8 @@ BOOL CYbInfoDlg::OnInitDialog()
 		m_cbOk.ModifyStyle(BS_PUSHBUTTON, BS_DEFPUSHBUTTON);
 		return TRUE;
 	}
-	m_cbBatteryList.BeginWaitCursor();
+	
+	CWaitCursor waitCursor;
 	m_cbBatteryList.Clear();
 	for(int i = 0; i < m_cyBatteries.m_nBatteries; i++){
 		CString csTemp;
@@ -209,36 +123,38 @@ BOOL CYbInfoDlg::OnInitDialog()
 		m_cbBatteryList.AddString(csTemp);
 	}
 	m_nSelectedBattery = 0;
-	m_cbBatteryList.EndWaitCursor();
+	waitCursor.Restore();
 	UpdateBatteryInformation();
 
 	return TRUE;  // TRUE を返すとコントロールに設定したフォーカスは失われません。
 }
 
-void CYbInfoDlg::OnSysCommand(UINT nID, LPARAM lParam)
+LRESULT CYbInfoDlg::OnSysCommand([[maybe_unused]] UINT uMsg, WPARAM wParam, [[maybe_unused]] LPARAM lParam, BOOL& bHandled)
 {
+	UINT nID = static_cast<UINT>(wParam);
+
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
-		CAboutDlg dlgAbout;
-		dlgAbout.DoModal();
+		OpenAboutDialog();
 	}
 	else
 	{
-		CDialog::OnSysCommand(nID, lParam);
+		bHandled = FALSE;
 	}
+	return 0;
 }
 
 // もしダイアログボックスに最小化ボタンを追加するならば、アイコンを描画する
 // コードを以下に記述する必要があります。MFC アプリケーションは document/view
 // モデルを使っているので、この処理はフレームワークにより自動的に処理されます。
 
-void CYbInfoDlg::OnPaint() 
+LRESULT CYbInfoDlg::OnPaint([[maybe_unused]] UINT uMsg, [[maybe_unused]] WPARAM wParam, [[maybe_unused]] LPARAM lParam, BOOL& bHandled)
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // 描画用のデバイス コンテキスト
+		CPaintDC dc(m_hWnd); // 描画用のデバイス コンテキスト
 
-		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
+		SendMessage(WM_ICONERASEBKGND, (WPARAM) m_hWnd, 0);
 
 		// クライアントの矩形領域内の中央
 		int cxIcon = GetSystemMetrics(SM_CXICON);
@@ -253,29 +169,37 @@ void CYbInfoDlg::OnPaint()
 	}
 	else
 	{
-		CDialog::OnPaint();
+		bHandled = false;
 	}
+	return 0;
 }
 
 // システムは、ユーザーが最小化ウィンドウをドラッグしている間、
 // カーソルを表示するためにここを呼び出します。
-HCURSOR CYbInfoDlg::OnQueryDragIcon()
+LRESULT CYbInfoDlg::OnQueryDragIcon([[maybe_unused]] UINT uMsg, [[maybe_unused]] WPARAM wParam, [[maybe_unused]] LPARAM lParam, [[maybe_unused]] BOOL& bHandled)
 {
-	return (HCURSOR) m_hIcon;
+	return reinterpret_cast<LRESULT>(m_hIcon);
 }
 
-void CYbInfoDlg::OnBUpdate() 
+LRESULT CYbInfoDlg::OnHelp([[maybe_unused]] UINT uMsg, [[maybe_unused]] WPARAM wParam, [[maybe_unused]] LPARAM lParam, [[maybe_unused]] BOOL& bHandled)
+{
+	OpenAboutDialog();
+	return 0;
+}
+
+LRESULT CYbInfoDlg::OnBUpdate([[maybe_unused]] WORD wNotifyCode, [[maybe_unused]] WORD wID, [[maybe_unused]] HWND hWndCtl, [[maybe_unused]] BOOL& bHandled)
 {
 	// TODO: この位置にコントロール通知ハンドラ用のコードを追加してください
 	UpdateBatteryInformation();
+	return 0;
 }
 
-void CYbInfoDlg::OnSelendokCbBatterylist() 
+LRESULT CYbInfoDlg::OnSelendokCbBatterylist([[maybe_unused]] WORD wNotifyCode, [[maybe_unused]] WORD wID, [[maybe_unused]] HWND hWndCtl, [[maybe_unused]] BOOL& bHandled)
 {
 	// TODO: この位置にコントロール通知ハンドラ用のコードを追加してください
-	UpdateData(TRUE);
+	DoDataExchange(DDX_SAVE);
 	UpdateBatteryInformation();
-	
+	return 0;
 }
 
 void CYbInfoDlg::UpdateBatteryInformation()
@@ -414,21 +338,11 @@ void CYbInfoDlg::UpdateBatteryInformation()
 		m_csTemperature.LoadString(IDS_UNKNOWN);
 	}
 
-	UpdateData(FALSE);
+	DoDataExchange(DDX_LOAD);
 
 }
 
-void CYbInfoDlg::WinHelp([[maybe_unused]] DWORD dwData, [[maybe_unused]] UINT nCmd)
-{
-	// TODO: この位置に固有の処理を追加するか、または基本クラスを呼び出してください
-	CAboutDlg aboutDlg;
-	aboutDlg.DoModal();
-	return;
-	//CDialog::WinHelp(dwData, nCmd);
-}
-
-
-void CYbInfoDlg::OnEnChangeEAutoupdate()
+LRESULT CYbInfoDlg::OnEnChangeEAutoupdate([[maybe_unused]] WORD wNotifyCode, [[maybe_unused]] WORD wID, [[maybe_unused]] HWND hWndCtl, [[maybe_unused]] BOOL& bHandled)
 {
 	// TODO :  これが RICHEDIT コントロールの場合、まず、CDialog::OnInitDialog() 関数をオーバーライドして、
 	// OR 状態の ENM_CORRECTTEXT フラグをマスクに入れて、
@@ -436,24 +350,54 @@ void CYbInfoDlg::OnEnChangeEAutoupdate()
 	// コントロールは、この通知を送信しません。
 
 	// TODO :  ここにコントロール通知ハンドラ コードを追加してください。
-	if(m_eAutoUpdate.GetWindowTextLength() <= 0){
-		return;
+	if(m_eAutoUpdate.m_hWnd && m_eAutoUpdate.GetWindowTextLength() <= 0){
+		return 0;
 	}
 
-	UpdateData(TRUE);
+	DoDataExchange(DDX_SAVE);
 	KillTimer(AutoUpdateTimerId);
 	if(m_iAutoUpdate){
 		SetTimer(AutoUpdateTimerId, m_iAutoUpdate * 1000, NULL);
 	}
-
+	return 0;
 }
 
-void CYbInfoDlg::OnTimer(UINT nIDEvent)
+LRESULT CYbInfoDlg::OnTimer([[maybe_unused]] UINT uMsg, WPARAM wParam, [[maybe_unused]] LPARAM lParam, BOOL& bHandled)
 {
 	// TODO : ここにメッセージ ハンドラ コードを追加するか、既定の処理を呼び出します。
+	const UINT_PTR nIDEvent = wParam;
 
 	if(nIDEvent == AutoUpdateTimerId){
 		UpdateBatteryInformation();
 	}
-	CDialog::OnTimer(nIDEvent);
+	else {
+		bHandled = FALSE;
+	}
+	return 0;
+}
+
+LRESULT CYbInfoDlg::OnOK([[maybe_unused]] WORD wNotifyCode, [[maybe_unused]] WORD wID, [[maybe_unused]] HWND hWndCtl, [[maybe_unused]] BOOL& bHandled)
+{
+	CloseDialog(0);
+	return 0;
+}
+
+LRESULT CYbInfoDlg::OnCancel([[maybe_unused]] WORD wNotifyCode, [[maybe_unused]] WORD wID, [[maybe_unused]] HWND hWndCtl, [[maybe_unused]] BOOL& bHandled)
+{
+	CloseDialog(0);
+	return 0;
+}
+
+void CYbInfoDlg::OpenAboutDialog() {
+	CAboutDlg dlgAbout;
+	dlgAbout.DoModal();
+}
+
+void CYbInfoDlg::CloseDialog(int nVal) {
+	// unregister message filtering
+	CMessageLoop* pLoop = _Module.GetMessageLoop();
+	_ASSERT(pLoop);
+	pLoop->RemoveMessageFilter(this);
+	DestroyWindow();
+	::PostQuitMessage(nVal);
 }

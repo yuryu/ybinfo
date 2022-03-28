@@ -29,18 +29,28 @@
 
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS      // some CString constructors will be explicit
 
-// turns off MFC's hiding of some common and often safely ignored warning messages
-#define _AFX_ALL_WARNINGS
+// Argument could be zero.
+#pragma warning(disable: 6387)
 
 #include "targetver.h"
 
-#include <afxwin.h>         // MFC のコアおよび標準コンポーネント
-#include <afxext.h>         // MFC の拡張部分
-#include <afxdisp.h>        // MFC のオートメーション クラス
-#include <afxdtctl.h>		// MFC の Internet Explorer 4 コモン コントロール サポート
-#ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>			// MFC の Windows コモン コントロール サポート
-#endif // _AFX_NO_AFXCMN_SUPPORT
+#pragma warning(push)
+
+// WTL/ATL related warnings
+#pragma warning(disable: 26110 26454 26812 6001)
+
+#include <atlbase.h>
+#include <atlstr.h>
+#include <wtl/atlapp.h>
+
+#include <wtl/atlmisc.h>
+#include <wtl/atlctrls.h>
+#include <wtl/atlctrlx.h>
+#include <wtl/atlddx.h>
+#include <wtl/atluser.h>
+#include <wtl/atlgdi.h>
+
+#pragma warning(pop)
 
 #include <initguid.h>
 #include <batclass.h>
@@ -48,6 +58,8 @@
 #include <winioctl.h>
 #include <initguid.h>
 #include <setupapi.h>
+
+#include <crtdbg.h>
 
 #include <vector>
 #include <cstdlib>

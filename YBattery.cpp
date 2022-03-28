@@ -25,12 +25,6 @@
 
 #include "resource.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // 構築/消滅
 //////////////////////////////////////////////////////////////////////
@@ -57,7 +51,7 @@ bool CYBattery::GetBatteryInformation(BATTERY_INFORMATION &batInfo)
 	bSucceeded = DeviceIoControl(m_hBattery, IOCTL_BATTERY_QUERY_INFORMATION,
 					&batQueryInfo, sizeof(batQueryInfo), &batInfo, sizeof(batInfo),
 					&dwBytesReturned, NULL);
-	TRACE(_T("error = %d\n"), GetLastError());
+	ATLTRACE(_T("error = %d\n"), GetLastError());
 	return !bSucceeded;
 		
 }
