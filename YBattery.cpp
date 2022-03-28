@@ -29,9 +29,10 @@
 // 構築/消滅
 //////////////////////////////////////////////////////////////////////
 
-CYBattery::CYBattery():
+CYBattery::CYBattery(LPCTSTR devicePath):
 	m_hBattery(nullptr),
-	m_ulBatTag(0)
+	m_ulBatTag(0),
+	m_csDevicePath(devicePath)
 {
 }
 
@@ -40,13 +41,13 @@ CYBattery::~CYBattery()
 	CloseIfOpen();
 }
 
-bool CYBattery::Open(const CString &csBatDevice)
+bool CYBattery::Open()
 {
 	CloseIfOpen();
-	m_hBattery = CreateFile(csBatDevice, GENERIC_READ, 
-						FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
+	m_hBattery = ::CreateFile(m_csDevicePath, GENERIC_READ, 
+						FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
 	if(m_hBattery == INVALID_HANDLE_VALUE){
-		m_hBattery = NULL;
+		m_hBattery = nullptr;
 		return false;
 	}
 	return true;
@@ -68,8 +69,8 @@ ULONG CYBattery::GetNewTag()
 	ULONG ulTag;
 	DWORD dwBytesReturned;
 
-	BOOL bResult = DeviceIoControl(m_hBattery, IOCTL_BATTERY_QUERY_TAG, &ulWait, sizeof(ULONG),
-					&ulTag, sizeof(ULONG), &dwBytesReturned, NULL);
+	BOOL bResult = ::DeviceIoControl(m_hBattery, IOCTL_BATTERY_QUERY_TAG, &ulWait, sizeof(ULONG),
+					&ulTag, sizeof(ULONG), &dwBytesReturned, nullptr);
 	if(!bResult){
 		m_ulBatTag = 0;
 		return 0;
@@ -97,7 +98,7 @@ bool CYBattery::QueryStatus(BATTERY_STATUS &batStat)
 	
 	batWaitStatus.BatteryTag = m_ulBatTag;
 	batWaitStatus.Timeout = 0;
-	const BOOL bSucceeded = DeviceIoControl(m_hBattery, IOCTL_BATTERY_QUERY_STATUS, 
+	const BOOL bSucceeded = ::DeviceIoControl(m_hBattery, IOCTL_BATTERY_QUERY_STATUS, 
 				&batWaitStatus, sizeof(batWaitStatus),
 				&batStat, sizeof(batStat), &dwBytesReturned, nullptr);
 	return bSucceeded;

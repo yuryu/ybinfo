@@ -31,52 +31,45 @@
 
 CYBatteries::CYBatteries()
 {
-	HDEVINFO hBatDevInfo= 
-			SetupDiGetClassDevs(&GUID_DEVICE_BATTERY, NULL, NULL, DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
+	std::unique_ptr<std::remove_pointer<HDEVINFO>::type, decltype(&::SetupDiDestroyDeviceInfoList)> hBatDevInfo(
+		::SetupDiGetClassDevs(&GUID_DEVICE_BATTERY, nullptr, nullptr, DIGCF_PRESENT | DIGCF_INTERFACEDEVICE),
+		::SetupDiDestroyDeviceInfoList);
 
-	int nIndex = 0, nNumberOfBatteries = 0;
-	for(;;){
-		BOOL bEnumDev;
+	int nNumberOfBatteries = 0;
+	for(int nIndex = 0; ; nIndex++){
 		SP_DEVICE_INTERFACE_DATA devInterfaceData;
 		devInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
-		bEnumDev = SetupDiEnumDeviceInterfaces(hBatDevInfo, NULL, &GUID_DEVICE_BATTERY, nIndex, &devInterfaceData);
+		const BOOL bEnumDev = ::SetupDiEnumDeviceInterfaces(hBatDevInfo.get(), nullptr, &GUID_DEVICE_BATTERY, nIndex, &devInterfaceData);
 		// FIXED A BUG 06/07/2004
 		// it was trying to get device information even when SetupDi... fails.
 		if(bEnumDev){
 			// add battery when successful
 			DWORD reqSize;
-			SetupDiGetDeviceInterfaceDetail(hBatDevInfo, &devInterfaceData, NULL, 0, &reqSize, NULL);
+			::SetupDiGetDeviceInterfaceDetail(hBatDevInfo.get(), &devInterfaceData, nullptr, 0, &reqSize, nullptr);
 
-			PSP_DEVICE_INTERFACE_DETAIL_DATA pDevDetailData;
-			pDevDetailData = reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA>(std::malloc(reqSize));
+			std::unique_ptr<SP_DEVICE_INTERFACE_DETAIL_DATA> pDevDetailData(
+				reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA>(::operator new(reqSize)));
+			// cbSize must always be the fixed length of the struct.
 			pDevDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
+			::SetupDiGetDeviceInterfaceDetail(hBatDevInfo.get(), &devInterfaceData, pDevDetailData.get(), reqSize, nullptr, nullptr);
 
-			SetupDiGetDeviceInterfaceDetail(hBatDevInfo, &devInterfaceData, pDevDetailData, reqSize, NULL, NULL);
-			CString csDevicePath = pDevDetailData->DevicePath;
-			std::free(pDevDetailData);
-			CYBattery* pcyBattery = new CYBattery;
-			pcyBattery->Open(csDevicePath);
-			m_vcpBatteries.push_back(pcyBattery);
-			nNumberOfBatteries++;
+			auto pcyBattery = std::make_unique<CYBattery>(pDevDetailData->DevicePath);
+			if (pcyBattery->Open()) {
+				m_vcpBatteries.push_back(std::move(pcyBattery));
+				nNumberOfBatteries++;
+			}
 		}else{
 			// FIXED A BUG 06/06/2004, where batteries are not correctly detected
 			// according to the SDK document, we must double-check with GetLastError()
 			// because there are some cases that SetupDiEnumDeviceInterface fails due to different reasons
-			if(GetLastError() == ERROR_NO_MORE_ITEMS){
+			if(::GetLastError() == ERROR_NO_MORE_ITEMS){
 				break;
 			}
 		}
-		nIndex++;
 	}
-	SetupDiDestroyDeviceInfoList(hBatDevInfo);
 	m_nBatteries = nNumberOfBatteries;
-	
 }
 
 CYBatteries::~CYBatteries()
 {
-	while(m_nBatteries--){
-		delete m_vcpBatteries[m_nBatteries];
-		m_vcpBatteries.pop_back();
-	}
 }
