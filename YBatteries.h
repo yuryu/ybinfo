@@ -34,10 +34,10 @@ class CYBatteries
 {
 public:
 	int m_nBatteries;
-	std::vector<CYBattery*> m_vcpBatteries;
+	std::vector<std::unique_ptr<CYBattery>> m_vcpBatteries;
 
 	CYBatteries();
-	virtual ~CYBatteries();
+	~CYBatteries();
 };
 
 #endif // !defined(AFX_YBATTERIES_H__2020652B_477C_4953_9B0D_AFFC64BDE37B__INCLUDED_)

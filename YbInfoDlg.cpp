@@ -213,7 +213,7 @@ LRESULT CYbInfoDlg::OnSelendokCbBatterylist([[maybe_unused]] WORD wNotifyCode, [
 
 void CYbInfoDlg::UpdateBatteryInformation()
 {
-	CYBattery* pcyBattery = m_cyBatteries.m_vcpBatteries[m_nSelectedBattery];
+	CYBattery* pcyBattery = m_cyBatteries.m_vcpBatteries[m_nSelectedBattery].get();
 
 	if (!pcyBattery->GetNewTag()) {
 		return;

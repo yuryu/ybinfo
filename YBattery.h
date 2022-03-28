@@ -31,10 +31,11 @@
 class CYBattery  
 {
 public:
-	CYBattery();
+	CYBattery() = delete;
+	CYBattery(LPCTSTR devicePath);
 	~CYBattery();
 
-	bool Open(const CString& csBatDevice);
+	bool Open();
 	bool QueryInfoString(const BATTERY_QUERY_INFORMATION_LEVEL level, const CStringW& csPlaceholder, CStringW& csOutStr);
 	template <typename T> bool QueryInfo(const BATTERY_QUERY_INFORMATION_LEVEL level, T& out);
 	bool QueryStatus(BATTERY_STATUS& batStat);
@@ -45,6 +46,7 @@ private:
 
 	ULONG m_ulBatTag;
 	HANDLE m_hBattery;
+	const CString m_csDevicePath;
 };
 
 template<typename T>
