@@ -59,7 +59,7 @@ CYbInfoDlg::CYbInfoDlg(): m_iAutoUpdate(0)
 	m_hIcon = static_cast<HICON>(::LoadImage(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_MAINFRAME),
 		IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR));
 	_ASSERT(m_hIcon);
-	const BOOL bLoaded = m_csUnknown.LoadString(IDS_UNKNOWN);
+	[[maybe_unused]] const BOOL bLoaded = m_csUnknown.LoadString(IDS_UNKNOWN);
 	_ASSERT(bLoaded);
 }
 
