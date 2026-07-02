@@ -29,6 +29,10 @@
 // 構築/消滅
 //////////////////////////////////////////////////////////////////////
 
+namespace {
+	constexpr DWORD MaxBatteries = 100;
+}
+
 CYBatteries::CYBatteries()
 {
 	const HDEVINFO hRawDevInfo = ::SetupDiGetClassDevs(&GUID_DEVICE_BATTERY, nullptr, nullptr, DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
