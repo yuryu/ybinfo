@@ -32,7 +32,7 @@ msbuild YbInfo.sln /m /p:Configuration=Release /p:Platform=x64
 ```
 
 or open `YbInfo.sln` in Visual Studio. Binaries are placed under
-`bin\<Platform>\<Configuration>\`. Win32 and x64 are supported.
+`bin\<Platform>\<Configuration>\`. Win32, x64, and ARM64 are supported.
 
 Release builds link the C runtime statically, so the resulting exe is
 self-contained and does not require the Visual C++ redistributable.
