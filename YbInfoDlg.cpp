@@ -163,7 +163,7 @@ LRESULT CYbInfoDlg::OnPaint([[maybe_unused]] UINT uMsg, [[maybe_unused]] WPARAM 
 	{
 		CPaintDC dc(m_hWnd); // 描画用のデバイス コンテキスト
 
-		SendMessage(WM_ICONERASEBKGND, (WPARAM) m_hWnd, 0);
+		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.m_hDC), 0);
 
 		// クライアントの矩形領域内の中央
 		int cxIcon = GetSystemMetrics(SM_CXICON);
