@@ -31,13 +31,12 @@
 
 CYBatteries::CYBatteries()
 {
-	std::unique_ptr<std::remove_pointer<HDEVINFO>::type, decltype(&::SetupDiDestroyDeviceInfoList)> hBatDevInfo(
-		::SetupDiGetClassDevs(&GUID_DEVICE_BATTERY, nullptr, nullptr, DIGCF_PRESENT | DIGCF_INTERFACEDEVICE),
-		::SetupDiDestroyDeviceInfoList);
-	if(hBatDevInfo.get() == INVALID_HANDLE_VALUE){
-		hBatDevInfo.release();
+	const HDEVINFO hRawDevInfo = ::SetupDiGetClassDevs(&GUID_DEVICE_BATTERY, nullptr, nullptr, DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
+	if(hRawDevInfo == INVALID_HANDLE_VALUE){
 		return;
 	}
+	const std::unique_ptr<std::remove_pointer<HDEVINFO>::type, decltype(&::SetupDiDestroyDeviceInfoList)> hBatDevInfo(
+		hRawDevInfo, ::SetupDiDestroyDeviceInfoList);
 
 	// device interface indices are not guaranteed to be contiguous, so failures
 	// other than ERROR_NO_MORE_ITEMS don't end the enumeration; the index cap
