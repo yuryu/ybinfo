@@ -235,12 +235,13 @@ void CYbInfoDlg::UpdateBatteryInformation()
 		m_csManufactureDate = m_csUnknown;
 	}
 
-	BATTERY_INFORMATION batInfo;
+	BATTERY_INFORMATION batInfo = {};
 	pcyBattery->QueryInfo(BatteryInformation, batInfo);
-	BATTERY_STATUS batStat;
+	BATTERY_STATUS batStat = {};
 	pcyBattery->QueryStatus(batStat);
 
 	UINT uCapFormat = IDS_CAPACITYFORMAT;
+	m_bRelativeCapacity = FALSE;
 	if(batInfo.Capabilities & BATTERY_CAPACITY_RELATIVE){
 		uCapFormat = IDS_RELCAPACITYFORMAT;
 		m_bRelativeCapacity = TRUE;
