@@ -35,7 +35,6 @@ CYBatteries::CYBatteries()
 		::SetupDiGetClassDevs(&GUID_DEVICE_BATTERY, nullptr, nullptr, DIGCF_PRESENT | DIGCF_INTERFACEDEVICE),
 		::SetupDiDestroyDeviceInfoList);
 
-	int nNumberOfBatteries = 0;
 	for(int nIndex = 0; ; nIndex++){
 		SP_DEVICE_INTERFACE_DATA devInterfaceData;
 		devInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
@@ -56,7 +55,6 @@ CYBatteries::CYBatteries()
 			auto pcyBattery = std::make_unique<CYBattery>(pDevDetailData->DevicePath);
 			if (pcyBattery->Open()) {
 				m_vcpBatteries.push_back(std::move(pcyBattery));
-				nNumberOfBatteries++;
 			}
 		}else{
 			// FIXED A BUG 06/06/2004, where batteries are not correctly detected
@@ -67,9 +65,4 @@ CYBatteries::CYBatteries()
 			}
 		}
 	}
-	m_nBatteries = nNumberOfBatteries;
-}
-
-CYBatteries::~CYBatteries()
-{
 }

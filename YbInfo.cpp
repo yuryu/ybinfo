@@ -50,7 +50,7 @@ int Run([[maybe_unused]] PTSTR pCmdLine, [[maybe_unused]] int nCmdShow) {
 	_Module.AddMessageLoop(&theLoop);
 
 	CYbInfoDlg dlg;
-	if (dlg.m_cyBatteries.m_nBatteries == 0) {
+	if (dlg.m_cyBatteries.Count() == 0) {
 		AtlMessageBox(nullptr, IDS_ERR_NOBATTERIES);
 	}
 	if (!dlg.Create(nullptr)) {

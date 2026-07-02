@@ -111,7 +111,7 @@ LRESULT CYbInfoDlg::OnInitDialog([[maybe_unused]] UINT uMsg, [[maybe_unused]] WP
 	m_spAutoUpdate.SetRange(0, UD_MAXVAL);
 	m_spAutoUpdate.SetBuddy(::GetDlgItem(m_hWnd, IDC_E_AUTOUPDATE));
 
-	if(m_cyBatteries.m_nBatteries == 0){
+	if(m_cyBatteries.Count() == 0){
 		m_cbUpdate.EnableWindow(FALSE);
 		m_cbUpdate.ModifyStyle(BS_DEFPUSHBUTTON, BS_PUSHBUTTON);
 		m_cbOk.ModifyStyle(BS_PUSHBUTTON, BS_DEFPUSHBUTTON);
@@ -120,7 +120,7 @@ LRESULT CYbInfoDlg::OnInitDialog([[maybe_unused]] UINT uMsg, [[maybe_unused]] WP
 	
 	CWaitCursor waitCursor;
 	m_cbBatteryList.Clear();
-	for(int i = 0; i < m_cyBatteries.m_nBatteries; i++){
+	for(int i = 0; i < m_cyBatteries.Count(); i++){
 		CStringW csDeviceName;
 		if (m_cyBatteries.m_vcpBatteries[i]->GetNewTag()) {
 			m_cyBatteries.m_vcpBatteries[i]->QueryInfoString(BatteryDeviceName, m_csUnknown, csDeviceName);
