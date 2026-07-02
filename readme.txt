@@ -31,7 +31,8 @@
     謎のアイコンではなく、でんちの「で」を抽象化したものです。
 
 ・ソースについて
-    開発環境は Visual Studio 2008 です。
+    開発環境は Visual Studio 2022 以降です。
+    WTL を使用しています（vcpkg のマニフェスト機能で自動的に導入されます）。
     GitHub にてソースコードを公開しています。
 
     https://github.com/yuryu/ybinfo/
