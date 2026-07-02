@@ -38,6 +38,9 @@ public:
 	CYBatteries();
 
 	int Count() const { return static_cast<int>(m_vcpBatteries.size()); }
+
+private:
+	static constexpr DWORD MaxBatteries = 100;
 };
 
 #endif // !defined(AFX_YBATTERIES_H__2020652B_477C_4953_9B0D_AFFC64BDE37B__INCLUDED_)
