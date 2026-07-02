@@ -20,6 +20,11 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
 
+      - name: Update vcpkg registry
+        # The runner image ships a snapshot of the vcpkg repo that may predate
+        # the builtin-baseline pinned in vcpkg.json; fetch so it can resolve.
+        run: git -C $env:VCPKG_INSTALLATION_ROOT fetch origin
+
       - name: Enable vcpkg MSBuild integration
         run: vcpkg integrate install
 
