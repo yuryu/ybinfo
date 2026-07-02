@@ -1,0 +1,35 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Release]
+        platform: [Win32, x64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Enable vcpkg MSBuild integration
+        run: vcpkg integrate install
+
+      - name: Build
+        run: msbuild YbInfo.sln /m /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
+
+      - name: Upload artifact
+        if: matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: YbInfo-${{ matrix.platform }}
+          path: bin/${{ matrix.platform }}/Release/YbInfo.exe
+          if-no-files-found: error
