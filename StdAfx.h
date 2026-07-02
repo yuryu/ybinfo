@@ -41,14 +41,14 @@
 
 #include <atlbase.h>
 #include <atlstr.h>
-#include <wtl/atlapp.h>
+#include <atlapp.h>
 
-#include <wtl/atlmisc.h>
-#include <wtl/atlctrls.h>
-#include <wtl/atlctrlx.h>
-#include <wtl/atlddx.h>
-#include <wtl/atluser.h>
-#include <wtl/atlgdi.h>
+#include <atlmisc.h>
+#include <atlctrls.h>
+#include <atlctrlx.h>
+#include <atlddx.h>
+#include <atluser.h>
+#include <atlgdi.h>
 
 #pragma warning(pop)
 
