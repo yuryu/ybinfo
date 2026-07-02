@@ -24,28 +24,7 @@
 
 CAppModule _Module;
 
-bool IsRunningOnWin2kOrLater()
-{
-	OSVERSIONINFO osVerInfo;
-
-	osVerInfo.dwOSVersionInfoSize = sizeof(osVerInfo);
-	GetVersionEx(&osVerInfo);
-	
-	// check if running under win2k or later
-	// **BUG** doesn't detect correctly under some circumstances
-	// more specific reports are needed
-	bool isNt = osVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT;
-	bool is2kOrLater = osVerInfo.dwMajorVersion >= 5;
-
-	return isNt && is2kOrLater;
-}
-
 int Run([[maybe_unused]] PTSTR pCmdLine, [[maybe_unused]] int nCmdShow) {
-	if (!IsRunningOnWin2kOrLater()) {
-		AtlMessageBox(nullptr, IDS_ERR_REQWIN2K, MB_ICONSTOP | MB_OK);
-		return EXIT_FAILURE;
-	}
-
 	CMessageLoop theLoop;
 	_Module.AddMessageLoop(&theLoop);
 
