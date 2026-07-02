@@ -34,35 +34,42 @@ CYBatteries::CYBatteries()
 	std::unique_ptr<std::remove_pointer<HDEVINFO>::type, decltype(&::SetupDiDestroyDeviceInfoList)> hBatDevInfo(
 		::SetupDiGetClassDevs(&GUID_DEVICE_BATTERY, nullptr, nullptr, DIGCF_PRESENT | DIGCF_INTERFACEDEVICE),
 		::SetupDiDestroyDeviceInfoList);
+	if(hBatDevInfo.get() == INVALID_HANDLE_VALUE){
+		hBatDevInfo.release();
+		return;
+	}
 
-	for(int nIndex = 0; ; nIndex++){
+	// device interface indices are not guaranteed to be contiguous, so failures
+	// other than ERROR_NO_MORE_ITEMS don't end the enumeration; the index cap
+	// keeps a persistent error from looping forever
+	for(DWORD nIndex = 0; nIndex < MaxBatteries; nIndex++){
 		SP_DEVICE_INTERFACE_DATA devInterfaceData;
 		devInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 		const BOOL bEnumDev = ::SetupDiEnumDeviceInterfaces(hBatDevInfo.get(), nullptr, &GUID_DEVICE_BATTERY, nIndex, &devInterfaceData);
-		// FIXED A BUG 06/07/2004
-		// it was trying to get device information even when SetupDi... fails.
-		if(bEnumDev){
-			// add battery when successful
-			DWORD reqSize;
-			::SetupDiGetDeviceInterfaceDetail(hBatDevInfo.get(), &devInterfaceData, nullptr, 0, &reqSize, nullptr);
-
-			std::unique_ptr<SP_DEVICE_INTERFACE_DETAIL_DATA> pDevDetailData(
-				reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA>(::operator new(reqSize)));
-			// cbSize must always be the fixed length of the struct.
-			pDevDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
-			::SetupDiGetDeviceInterfaceDetail(hBatDevInfo.get(), &devInterfaceData, pDevDetailData.get(), reqSize, nullptr, nullptr);
-
-			auto pcyBattery = std::make_unique<CYBattery>(pDevDetailData->DevicePath);
-			if (pcyBattery->Open()) {
-				m_vcpBatteries.push_back(std::move(pcyBattery));
-			}
-		}else{
-			// FIXED A BUG 06/06/2004, where batteries are not correctly detected
-			// according to the SDK document, we must double-check with GetLastError()
-			// because there are some cases that SetupDiEnumDeviceInterface fails due to different reasons
+		if(!bEnumDev){
 			if(::GetLastError() == ERROR_NO_MORE_ITEMS){
 				break;
 			}
+			continue;
+		}
+
+		DWORD reqSize = 0;
+		::SetupDiGetDeviceInterfaceDetail(hBatDevInfo.get(), &devInterfaceData, nullptr, 0, &reqSize, nullptr);
+		if(::GetLastError() != ERROR_INSUFFICIENT_BUFFER){
+			continue;
+		}
+
+		const auto pDetailBuffer = std::make_unique<std::byte[]>(reqSize);
+		const auto pDevDetailData = reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA>(pDetailBuffer.get());
+		// cbSize must always be the fixed length of the struct.
+		pDevDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
+		if(!::SetupDiGetDeviceInterfaceDetail(hBatDevInfo.get(), &devInterfaceData, pDevDetailData, reqSize, nullptr, nullptr)){
+			continue;
+		}
+
+		auto pcyBattery = std::make_unique<CYBattery>(pDevDetailData->DevicePath);
+		if (pcyBattery->Open()) {
+			m_vcpBatteries.push_back(std::move(pcyBattery));
 		}
 	}
 }
