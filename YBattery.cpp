@@ -84,7 +84,7 @@ bool CYBattery::QueryInfoString(const BATTERY_QUERY_INFORMATION_LEVEL level, con
 	wchar_t wszStrTemp[200] = { 0 };
 	const auto bSucceeded = QueryInfo(level, wszStrTemp);
 	if (bSucceeded) {
-		csOutStr = CStringW(std::move(wszStrTemp));
+		csOutStr = wszStrTemp;
 	} else {
 		csOutStr = csPlaceholder;
 	}
