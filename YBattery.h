@@ -33,6 +33,8 @@ class CYBattery
 public:
 	CYBattery() = delete;
 	CYBattery(LPCTSTR devicePath);
+	CYBattery(const CYBattery&) = delete;
+	CYBattery& operator=(const CYBattery&) = delete;
 	~CYBattery();
 
 	bool Open();
