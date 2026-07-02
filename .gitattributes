@@ -1,0 +1,14 @@
+# Text files are stored with LF in the repository; the working tree
+# follows core.autocrlf / core.eol unless overridden below.
+* text=auto
+
+# Visual Studio project files and resource scripts check out with CRLF
+# on every platform.
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
+*.filters text eol=crlf
+*.rc text eol=crlf
+*.rc2 text eol=crlf
+
+# Binary files
+*.ico binary
