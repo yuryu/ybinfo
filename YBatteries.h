@@ -28,16 +28,16 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-class CYBattery;
+#include "YBattery.h"
 
-class CYBatteries  
+class CYBatteries
 {
 public:
-	int m_nBatteries;
 	std::vector<std::unique_ptr<CYBattery>> m_vcpBatteries;
 
 	CYBatteries();
-	~CYBatteries();
+
+	int Count() const { return static_cast<int>(m_vcpBatteries.size()); }
 };
 
 #endif // !defined(AFX_YBATTERIES_H__2020652B_477C_4953_9B0D_AFFC64BDE37B__INCLUDED_)
