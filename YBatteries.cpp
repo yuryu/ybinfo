@@ -58,8 +58,10 @@ CYBatteries::CYBatteries()
 			continue;
 		}
 
-		const auto pDetailBuffer = std::make_unique<std::byte[]>(reqSize);
-		const auto pDevDetailData = reinterpret_cast<PSP_DEVICE_INTERFACE_DETAIL_DATA>(pDetailBuffer.get());
+		CHeapPtr<SP_DEVICE_INTERFACE_DETAIL_DATA> pDevDetailData;
+		if(!pDevDetailData.AllocateBytes(reqSize)){
+			continue;
+		}
 		// cbSize must always be the fixed length of the struct.
 		pDevDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 		if(!::SetupDiGetDeviceInterfaceDetail(hBatDevInfo.get(), &devInterfaceData, pDevDetailData, reqSize, nullptr, nullptr)){
