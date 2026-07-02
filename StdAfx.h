@@ -62,7 +62,6 @@
 #include <crtdbg.h>
 
 #include <vector>
-#include <cstddef>
 #include <cstdlib>
 #include <memory>
 #include <type_traits>
