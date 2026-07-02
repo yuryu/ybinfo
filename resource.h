@@ -23,7 +23,6 @@
 #define IDS_CAPPERFORMAT                116
 #define IDR_MAINFRAME                   128
 #define IDR_MAINFRAME2                  135
-#define IDS_ERR_REQWIN2K                1000
 #define IDC_CB_BATTERYLIST              1002
 #define IDS_ERR_NOBATTERIES             1002
 #define IDC_B_UPDATE                    1003

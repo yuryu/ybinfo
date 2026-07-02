@@ -233,7 +233,6 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_ERR_REQWIN2K        "このアプリケーションを使うには、Windows 2000かそれ以降のOSが必要です\nWindows 9x系では動作しません。"
     IDS_ERR_NOBATTERIES     "バッテリーが見つかりませんでした。"
 END
 
