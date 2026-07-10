@@ -66,6 +66,9 @@
 #include <memory>
 #include <type_traits>
 
+// The SysLink control in the about dialog only exists in ComCtl32 v6.
+#pragma comment(linker, "\"/manifestdependency:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ は前行の直前に追加の宣言を挿入します。
 

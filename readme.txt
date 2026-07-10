@@ -42,6 +42,11 @@
 ・ライセンス
     Apache License, Version 2.0 にて配布します。
 
+    本プログラムは Windows Template Library (WTL) を使用しています。
+    WTL は Microsoft Public License (MS-PL) にて配布されています。
+    詳細は acknowledgements.txt またはバージョン情報ダイアログを
+    参照してください。
+
     Yuryu's Battery Information, displays detailed battery info.
     Copyright 2008 Yuryu / Emma Haruka Iwao
 

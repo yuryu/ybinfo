@@ -42,3 +42,7 @@ See `readme.txt` for the original documentation in Japanese.
 ## License
 
 Apache License, Version 2.0. See [LICENSE](LICENSE).
+
+YbInfo uses the Windows Template Library (WTL), which is distributed under
+the Microsoft Public License (MS-PL). See
+[acknowledgements.txt](acknowledgements.txt), also shown in the About dialog.

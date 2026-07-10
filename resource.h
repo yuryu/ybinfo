@@ -22,6 +22,7 @@
 #define IDS_TEMPFORMAT                  115
 #define IDS_CAPPERFORMAT                116
 #define IDR_MAINFRAME                   128
+#define IDR_ACKNOWLEDGEMENTS            131
 #define IDR_MAINFRAME2                  135
 #define IDC_CB_BATTERYLIST              1002
 #define IDS_ERR_NOBATTERIES             1002
@@ -52,14 +53,16 @@
 #define IDC_SPIN1                       1036
 #define IDC_SPIN_AUTOUPDATE             1036
 #define IDC_E_AUTOUPDATE                1037
+#define IDC_LINK_LICENSE                1038
+#define IDC_E_ACKNOWLEDGEMENTS          1039
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        131
+#define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1038
+#define _APS_NEXT_CONTROL_VALUE         1040
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
