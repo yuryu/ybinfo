@@ -142,6 +142,7 @@
     <None Include="res\YbInfo.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="acknowledgements.txt" />
     <Text Include="readme.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

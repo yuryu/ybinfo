@@ -10,5 +10,9 @@
 *.rc text eol=crlf
 *.rc2 text eol=crlf
 
+# acknowledgements.txt is embedded verbatim as an RCDATA resource and shown
+# in a multiline edit control, which needs CRLF line endings.
+acknowledgements.txt text eol=crlf
+
 # Binary files
 *.ico binary

@@ -48,7 +48,7 @@ int WINAPI _tWinMain([[maybe_unused]] HINSTANCE hInstance, [[maybe_unused]] HINS
 
 	::DefWindowProc(nullptr, 0, 0, 0);
 
-	AtlInitCommonControls(ICC_COOL_CLASSES | ICC_BAR_CLASSES);
+	AtlInitCommonControls(ICC_COOL_CLASSES | ICC_BAR_CLASSES | ICC_STANDARD_CLASSES | ICC_PROGRESS_CLASS | ICC_UPDOWN_CLASS | ICC_LINK_CLASS);
 
 	hRes = _Module.Init(nullptr, hInstance);
 	ATLASSERT(SUCCEEDED(hRes));
